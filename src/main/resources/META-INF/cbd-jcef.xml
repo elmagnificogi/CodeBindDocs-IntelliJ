@@ -1,0 +1,4 @@
+<idea-plugin>
+  <!-- Loaded only when the Web Browser (JCEF) bundled plugin is installed.
+       The doc tool window stays in the main descriptor and degrades to HTML if JCEF is missing. -->
+</idea-plugin>

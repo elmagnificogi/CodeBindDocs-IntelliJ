@@ -1,14 +1,14 @@
-# CodeBind Docs for IntelliJ 使用说明
+# CodeBind Docs for JetBrains IDEs 使用说明
 
 面向最终用户。产品全称 **CodeBind Docs**，简称 **CBD**。
 
 ## 1. 安装
 
 1. 构建插件：`gradlew buildPlugin`
-2. IDEA：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选 `build/distributions/*.zip`
+2. 任意 JetBrains IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选 `build/distributions/*.zip`
 3. 重启 IDE，打开一个项目文件夹
 
-环境：IntelliJ Platform 2024.1+（IDEA / Android Studio / PyCharm / WebStorm / GoLand / CLion 等）。
+环境：基于 IntelliJ 平台 2024.1+ 的 JetBrains IDE（IntelliJ IDEA、Android Studio、PyCharm、WebStorm、GoLand、CLion、PhpStorm、Rider、DataGrip 等）。
 
 **2026.2 起**即时渲染依赖捆绑插件 **Web Browser (JCEF)**。若右侧面板空白或提示无法加载浏览器：Settings → Plugins 启用该插件后重启。未启用时仍可从左侧 **CBD Bindings** 打开 Markdown。
 

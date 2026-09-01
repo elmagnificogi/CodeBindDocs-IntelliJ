@@ -41,7 +41,7 @@ java {
 
 intellijPlatform {
     pluginConfiguration {
-        id = "com.codebinddocs.intellij"
+        id = providers.gradleProperty("pluginId")
         name = providers.gradleProperty("pluginName")
         version = providers.gradleProperty("pluginVersion")
         ideaVersion {

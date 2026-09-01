@@ -1,8 +1,8 @@
-# CodeBind Docs（IntelliJ）产品需求
+# CodeBind Docs（JetBrains IDEs）产品需求
 
 ## 定位
 
-CodeBind Docs（**CBD**）IntelliJ Platform 插件：用旁路绑定把设计文档与源码关联，在 IDE 中左右分栏同步查看与编辑，且不修改原始源码。绑定格式与 VS Code / Cursor 扩展一致，同一仓库可两边共用文档。
+CodeBind Docs（**CBD**）是面向 **JetBrains IDE** 的插件（基于 IntelliJ 平台，不限 IntelliJ IDEA）：用旁路绑定把设计文档与源码关联，在 IDE 中左右分栏同步查看与编辑，且不修改原始源码。绑定格式与 VS Code / Cursor 扩展一致，同一仓库可两边共用文档。
 
 ## 目标
 

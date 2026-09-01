@@ -1,14 +1,12 @@
 <idea-plugin>
-  <id>com.codebinddocs.intellij</id>
+  <id>com.codebinddocs.plugin</id>
   <name>CodeBind Docs</name>
-  <vendor url="https://github.com/elmagnificogi/CodeBindDocs">codebinddocs</vendor>
-  <description><![CDATA[
-    <p><b>CodeBind Docs</b> 把设计文档旁路绑定到源码：不改源码、本地 Markdown 可 Git，打开代码时右侧同步文档。</p>
-    <p>支持整文件 / 代码块 / 目录绑定、漂移检测、Vditor 即时渲染，以及 AGENTS.md 脚手架。与 VS Code / Cursor 扩展共用同一套 YAML 绑定格式。</p>
-  ]]></description>
+  <vendor url="https://github.com/elmagnificogi/CodeBindDocs-IntelliJ">codebinddocs</vendor>
+  <description><![CDATA[CodeBind Docs binds design documents to source files in JetBrains IDEs without modifying the code. Docs live as local Git-friendly Markdown and open beside the editor when you switch files.
+<p>Works in IntelliJ IDEA, Android Studio, PyCharm, WebStorm, GoLand, CLion, PhpStorm, Rider, DataGrip, and other IntelliJ-based IDEs. Supports file / range / directory bindings, drift detection, Vditor live preview, and AGENTS.md scaffolding. The YAML header is compatible with the VS Code / Cursor extension.</p>]]></description>
   <depends>com.intellij.modules.platform</depends>
-  <!-- 2026.2 起 JCEF 从平台拆出；optional 以兼容 2025.3.1 之前（当时 JCEF 仍在 core）。 -->
-  <depends optional="true">com.intellij.modules.jcef</depends>
+  <!-- 2026.2 起 JCEF 从平台拆出；optional + config-file 以便无 JCEF 时仍能加载插件。 -->
+  <depends optional="true" config-file="cbd-jcef.xml">com.intellij.modules.jcef</depends>
   <extensions defaultExtensionNs="com.intellij">
     <notificationGroup id="CodeBind Docs" displayType="BALLOON"/>
     <postStartupActivity implementation="com.codebinddocs.intellij.CbdStartupActivity"/>

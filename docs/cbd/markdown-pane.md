@@ -9,7 +9,7 @@ cbd:
 
 右侧文档面板：主页、覆盖率、无关联、Vditor IR、保存、导航、资源上传。
 
-优先用 JCEF 加载 Vditor。IntelliJ 2026.2 起 JCEF 不在 core 里，必须声明 `com.intellij.modules.jcef`（optional），否则 `JBCefApp` 对插件 classloader 不可见，Initialize 会直接炸掉。探测时捕获 `ClassNotFoundException` / `LinkageError`；不可用时退到简易 HTML，避免工具窗创建失败。
+优先用 JCEF 加载 Vditor。平台 **2026.2** 起 JCEF 不在 core 里，必须声明 `com.intellij.modules.jcef`（optional + `config-file`），否则 `JBCefApp` 对插件 classloader 不可见，Initialize 会直接炸掉。探测时捕获 `ClassNotFoundException` / `LinkageError`；不可用时退到简易 HTML，避免工具窗创建失败。
 
 `pane.js` 点按钮时用 `console.log('__CBD_MSG__'+json)` 回传（不依赖 JSQuery 是否已注入）；主页 / 后退 / 新建关联走同一条通道。不在主页时「后退」可回到主页。
 

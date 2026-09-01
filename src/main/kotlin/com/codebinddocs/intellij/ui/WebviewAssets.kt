@@ -13,7 +13,7 @@ object WebviewAssets {
         val dir = Path.of(PathManager.getPluginTempPath(), "codebinddocs-webview")
         Files.createDirectories(dir)
         val marker = dir.resolve(".stamp")
-        val plugin = PluginManagerCore.getPlugin(PluginId.getId("com.codebinddocs.intellij"))
+        val plugin = PluginManagerCore.getPlugin(PluginId.getId("com.codebinddocs.plugin"))
         val stamp = plugin?.version ?: "dev"
         copyResource("/webview/pane.html", dir.resolve("pane.html"))
         copyResource("/webview/pane.css", dir.resolve("pane.css"))

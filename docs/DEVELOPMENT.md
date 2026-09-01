@@ -1,4 +1,4 @@
-# CodeBind Docs for IntelliJ 开发
+# CodeBind Docs for JetBrains IDEs 开发
 
 ## 结构
 
@@ -25,6 +25,6 @@ gradlew runIde
 
 ## 调试
 
-`runIde` 启动带本插件的 IntelliJ Community。改代码后重新 runIde 或在沙箱 IDE 里 **Reload**。
+`runIde` 启动带本插件的 IntelliJ IDEA Community（用于调试；安装产物可装到任意基于该平台的 JetBrains IDE）。改代码后重新 runIde 或在沙箱 IDE 里 **Reload**。
 
-2026.2 起文档面板依赖捆绑插件 JCEF（`com.intellij.modules.jcef`，`plugin.xml` 中为 optional，以便 2025.3.1 之前仍能加载）。
+2026.2 起文档面板依赖捆绑插件 JCEF（`com.intellij.modules.jcef`，`plugin.xml` 中为 optional 并带 `config-file="cbd-jcef.xml"`，以便无 JCEF 时仍能加载）。

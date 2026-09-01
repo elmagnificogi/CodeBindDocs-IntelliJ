@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.13
+
+- 市场校验：插件 ID 改为 `com.codebinddocs.plugin`（ID 不能含 intellij）；简介改为英文开头；JCEF 可选依赖补上 `config-file`
+
 ## 0.1.12
 
 - 代码块选区只保留编辑器顶部确认条，去掉右下角重复通知
