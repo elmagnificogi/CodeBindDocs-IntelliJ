@@ -17,7 +17,7 @@
 目前从磁盘安装插件 zip（尚未上 JetBrains Marketplace）：
 
 1. 构建：`gradlew.bat buildPlugin`（需要 **JDK 21**）
-2. IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选 `build/distributions/CodeBindDocs-IntelliJ-*.zip`
+2. IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选 `build/distributions/CodeBindDocs-JetBrains-*.zip`
 3. 重启 IDE，打开一个**项目文件夹**
 
 环境：基于 IntelliJ 平台 **2024.1+** 的 JetBrains IDE。
