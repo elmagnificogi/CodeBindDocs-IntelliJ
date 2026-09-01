@@ -14,11 +14,12 @@
 
 ## 安装
 
-目前从磁盘安装插件 zip（尚未上 JetBrains Marketplace）：
+优先从 [GitHub Releases](https://github.com/elmagnificogi/CodeBindDocs-IntelliJ/releases) 下载 `CodeBindDocs-JetBrains-*.zip`（打 `v*` tag 后由 CI 自动发布），然后：
 
-1. 构建：`gradlew.bat buildPlugin`（需要 **JDK 21**）
-2. IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选 `build/distributions/CodeBindDocs-JetBrains-*.zip`
-3. 重启 IDE，打开一个**项目文件夹**
+1. IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选下载的 zip
+2. 重启 IDE，打开一个**项目文件夹**
+
+本地构建：`gradlew.bat buildPlugin`（需要 **JDK 21**），产物在 `build/distributions/`。尚未上 JetBrains Marketplace 时也可这样装。
 
 环境：基于 IntelliJ 平台 **2024.1+** 的 JetBrains IDE。
 
@@ -130,7 +131,7 @@ cbd:
 |------|------|
 | [使用说明](docs/USER_GUIDE.md) | 安装、绑定、漂移、设置、命令 |
 | [产品需求](docs/REQUIREMENTS.md) | 定位、范围、数据模型 |
-| [开发调试](docs/DEVELOPMENT.md) | Gradle、`runIde`、JCEF |
+| [开发调试](docs/DEVELOPMENT.md) | Gradle、`runIde`、JCEF、CI 发版 |
 | [VS Code 扩展](https://github.com/elmagnificogi/CodeBindDocs) | 同一套绑定格式的 VS Code / Cursor 版 |
 
 ```bat

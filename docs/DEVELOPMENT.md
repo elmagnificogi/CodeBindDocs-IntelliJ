@@ -18,13 +18,43 @@ docs/cbd                                  本仓库 dogfood 绑定文档
 
 ```bat
 set JAVA_HOME=C:\Users\elmag\.jdks\jdk-21.0.12.1+1
-gradlew test
-gradlew buildPlugin
-gradlew runIde
+gradlew.bat test
+gradlew.bat buildPlugin
+gradlew.bat runIde
 ```
+
+生成的 zip 在 `build/distributions/`。CI 说明见文末「CI 与自动发版」。
 
 ## 调试
 
 `runIde` 启动带本插件的 IntelliJ IDEA Community（用于调试；安装产物可装到任意基于该平台的 JetBrains IDE）。改代码后重新 runIde 或在沙箱 IDE 里 **Reload**。
 
 2026.2 起文档面板依赖捆绑插件 JCEF（`com.intellij.modules.jcef`，`plugin.xml` 中为 optional 并带 `config-file="cbd-jcef.xml"`，以便无 JCEF 时仍能加载）。
+
+## CI 与自动发版
+
+仓库 workflow：
+
+- [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)：push / PR 跑 `check` + `buildPlugin`
+- [`.github/workflows/publish.yml`](../.github/workflows/publish.yml)：打 `v*` tag 后发 GitHub Release
+
+发版步骤：
+
+1. 把 `gradle.properties` 的 `pluginVersion` 升到目标版（如 `0.1.14`），并在 `CHANGELOG.md` 写同名章节。
+2. 提交后打同名 tag：
+
+```bash
+git tag v0.1.14
+git push origin v0.1.14
+```
+
+3. tag 必须与 `pluginVersion` 一致（`v` 前缀），否则 workflow 失败。
+4. 成功后会在 GitHub **Releases** 创建同名 release，并附上 `CodeBindDocs-JetBrains-*.zip`。说明取自 `CHANGELOG.md` 对应章节。
+5. 也可在 Actions 里手动 **Run workflow**（`workflow_dispatch`）；手动跑时不做 tag 校验，也**不**创建 GitHub Release，只上传构建产物。
+
+可选：上 JetBrains Marketplace。在 GitHub → Settings → Secrets and variables → Actions 配置：
+
+- **`PUBLISH_TOKEN`**：https://plugins.jetbrains.com/author/me/tokens
+- 若 Marketplace 要求签名，再配 **`CERTIFICATE_CHAIN`** / **`PRIVATE_KEY`** / **`PRIVATE_KEY_PASSWORD`**（见 [Plugin Signing](https://plugins.jetbrains.com/docs/intellij/plugin-signing.html)）
+
+未配置 `PUBLISH_TOKEN` 时仍会发 GitHub Release，只是跳过市场上架。

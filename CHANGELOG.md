@@ -4,6 +4,7 @@
 
 - 市场校验：插件 ID 改为 `com.codebinddocs.plugin`（ID 不能含 intellij）；简介改为英文开头；JCEF 可选依赖补上 `config-file`
 - Gradle 工程名改为 `CodeBindDocs-JetBrains`（安装 zip 文件名随之变化）
+- GitHub Actions：push/PR 跑测试并打包；打 `v*` tag 自动发 GitHub Release（附 zip）；配置 `PUBLISH_TOKEN` 后同步上 JetBrains Marketplace
 
 ## 0.1.12
 

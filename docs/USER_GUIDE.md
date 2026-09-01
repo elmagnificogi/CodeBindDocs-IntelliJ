@@ -4,8 +4,8 @@
 
 ## 1. 安装
 
-1. 构建插件：`gradlew buildPlugin`
-2. 任意 JetBrains IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选 `build/distributions/*.zip`
+1. 从 [GitHub Releases](https://github.com/elmagnificogi/CodeBindDocs-IntelliJ/releases) 下载 `CodeBindDocs-JetBrains-*.zip`，或本地 `gradlew buildPlugin`
+2. 任意 JetBrains IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选该 zip
 3. 重启 IDE，打开一个项目文件夹
 
 环境：基于 IntelliJ 平台 2024.1+ 的 JetBrains IDE（IntelliJ IDEA、Android Studio、PyCharm、WebStorm、GoLand、CLion、PhpStorm、Rider、DataGrip 等）。
