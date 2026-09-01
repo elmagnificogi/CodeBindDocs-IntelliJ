@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./vditor/dist/index.css" />
+  <link rel="stylesheet" href="./pane.css" />
+</head>
+<body>
+  <div id="navBar" class="bar">
+    <button type="button" id="btnBack" title="后退" disabled>← 后退</button>
+    <button type="button" id="btnForward" title="前进" disabled>前进 →</button>
+    <button type="button" id="btnHome" title="文档主页">主页</button>
+    <span class="sep"></span>
+    <span id="editorBar">
+      <button type="button" id="btnIr" class="active">即时渲染</button>
+      <button type="button" id="btnSource">文档源码</button>
+      <span class="sep"></span>
+      <button type="button" id="btnRevealSource" class="hidden-mode" title="打开并选中绑定的代码范围">Code</button>
+      <button type="button" id="btnDirectoryDoc" class="hidden-mode" title="打开当前代码上层目录的绑定文档">目录文档</button>
+      <button type="button" id="btnDelete" class="danger hidden-mode" title="删除此文档">删除</button>
+    </span>
+    <span class="hint" id="hint">输入 Markdown 即时渲染 · YAML 头已隐藏</span>
+  </div>
+  <div id="editorRoot">
+    <div id="wrap">
+      <div id="vditorIr"></div>
+      <textarea id="mdSource" class="hidden-mode" spellcheck="false" aria-label="文档源码"></textarea>
+    </div>
+  </div>
+  <div id="home">
+    <h2>文档主页</h2>
+    <p>文档目录 <code id="homeDocsPath"></code> · 点击下方链接打开对应文档</p>
+    <div id="coverageSection" class="hidden-mode">
+      <h2>绑定覆盖率</h2>
+      <p id="coverageStat" class="cov-stat"></p>
+      <p id="coverageActions" class="cov-actions hidden-mode">
+        <button type="button" id="btnOpenCoverage" class="cta">查看未绑定</button>
+      </p>
+    </div>
+    <div id="missingSection" class="hidden-mode">
+      <h2>绑定提醒</h2>
+      <p>以下绑定缺失或行范围/符号可能失效，建议处理。</p>
+      <ul class="doc-list" id="missingList"></ul>
+    </div>
+    <div id="hintSection" class="hidden-mode">
+      <h2>文档核对提醒</h2>
+      <p>源码已变，请确认旁路文档是否仍准确。<strong>仅提醒，可忽略</strong>；核对完毕后可「标记已核对」清除提示。</p>
+      <p id="hashBulkRow" class="hidden-mode" style="margin:0 0 12px">
+        <button type="button" id="btnRefreshAllHashes" class="cta">全部标记已核对</button>
+      </p>
+      <ul class="doc-list" id="hintList"></ul>
+    </div>
+    <h2 id="boundHeading">已绑定文档</h2>
+    <p style="margin-top:-8px">按源文件目录树排列 · 点文件夹折叠 · 点源文件名打开 Code · 点文档打开旁路文档</p>
+    <ul class="bound-tree" id="docList"></ul>
+  </div>
+  <div id="coveragePage">
+    <h2>未绑定源文件</h2>
+    <p id="coveragePageStat" class="cov-stat"></p>
+    <ul class="doc-list cov-list" id="coveragePageList"></ul>
+  </div>
+  <div id="unbound" class="center">
+    <h2>无关联文档</h2>
+    <p>当前文件 <code id="unboundPath"></code> 尚未绑定 CodeBind Docs 文档。</p>
+    <p id="unboundDirHint" class="hidden-mode">所在目录 <code id="unboundDirPath"></code> 有说明文档：<code id="unboundDirDocName"></code></p>
+    <button type="button" class="cta primary" id="btnCreate">新建关联文档</button>
+    <button type="button" class="cta" id="btnOpenDirDoc" style="display:none">打开目录文档</button>
+  </div>
+  <script src="./vditor/dist/index.min.js"></script>
+  <script src="./pane.js"></script>
+</body>
+</html>

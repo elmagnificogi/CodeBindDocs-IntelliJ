@@ -1,0 +1,51 @@
+<idea-plugin>
+  <id>com.codebinddocs.intellij</id>
+  <name>CodeBind Docs</name>
+  <vendor url="https://github.com/elmagnificogi/CodeBindDocs">codebinddocs</vendor>
+  <description><![CDATA[
+    <p><b>CodeBind Docs</b> 把设计文档旁路绑定到源码：不改源码、本地 Markdown 可 Git，打开代码时右侧同步文档。</p>
+    <p>支持整文件 / 代码块 / 目录绑定、漂移检测、Vditor 即时渲染，以及 AGENTS.md 脚手架。与 VS Code / Cursor 扩展共用同一套 YAML 绑定格式。</p>
+  ]]></description>
+  <depends>com.intellij.modules.platform</depends>
+  <!-- 2026.2 起 JCEF 从平台拆出；optional 以兼容 2025.3.1 之前（当时 JCEF 仍在 core）。 -->
+  <depends optional="true">com.intellij.modules.jcef</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <notificationGroup id="CodeBind Docs" displayType="BALLOON"/>
+    <postStartupActivity implementation="com.codebinddocs.intellij.CbdStartupActivity"/>
+    <projectConfigurable parentId="tools" instance="com.codebinddocs.intellij.CbdConfigurable"
+                         id="codebinddocs" displayName="CodeBind Docs"/>
+    <toolWindow id="CodeBind Docs" anchor="right" icon="/icons/cbd.svg"
+                factoryClass="com.codebinddocs.intellij.ui.CbdDocToolWindowFactory"/>
+    <toolWindow id="CBD Bindings" anchor="left" icon="/icons/cbd.svg"
+                factoryClass="com.codebinddocs.intellij.ui.CbdBindingsToolWindowFactory"/>
+    <statusBarWidgetFactory id="CodeBindDocs" implementation="com.codebinddocs.intellij.CbdStatusBarWidgetFactory"/>
+  </extensions>
+  <actions>
+    <group id="Cbd.Menu" text="CodeBind Docs" popup="true">
+      <add-to-group group-id="ToolsMenu" anchor="last"/>
+      <action id="Cbd.Initialize" class="com.codebinddocs.intellij.actions.CbdInitializeAction" text="CBD: Initialize" description="初始化文档目录与 Agent 脚手架"/>
+      <action id="Cbd.BindCurrentFile" class="com.codebinddocs.intellij.actions.CbdBindCurrentFileAction" text="CBD: Bind Doc to Current File"/>
+      <action id="Cbd.BindCurrentFolder" class="com.codebinddocs.intellij.actions.CbdBindCurrentFolderAction" text="CBD: Bind Doc to Folder"/>
+      <action id="Cbd.RevealBoundDoc" class="com.codebinddocs.intellij.actions.CbdRevealBoundDocAction" text="CBD: Reveal Bound Doc">
+        <keyboard-shortcut keymap="$default" first-keystroke="control alt D"/>
+      </action>
+      <action id="Cbd.ToggleSplitSync" class="com.codebinddocs.intellij.actions.CbdToggleSplitSyncAction" text="CBD: Toggle Split Sync">
+        <keyboard-shortcut keymap="$default" first-keystroke="control alt shift D"/>
+      </action>
+      <action id="Cbd.OpenDocsIndex" class="com.codebinddocs.intellij.actions.CbdOpenDocsIndexAction" text="CBD: Open Docs Index" icon="AllIcons.Nodes.HomeFolder"/>
+      <action id="Cbd.RevealSourceRange" class="com.codebinddocs.intellij.actions.CbdRevealSourceRangeAction" text="CBD: Reveal Source Range"/>
+      <action id="Cbd.DeleteDoc" class="com.codebinddocs.intellij.actions.CbdDeleteDocAction" text="CBD: Delete Bound Doc"/>
+      <action id="Cbd.RebindDoc" class="com.codebinddocs.intellij.actions.CbdRebindDocAction" text="CBD: Rebind Doc to Source"/>
+      <action id="Cbd.RetightenRange" class="com.codebinddocs.intellij.actions.CbdRetightenRangeAction" text="CBD: Retighten Range by Symbol"/>
+      <action id="Cbd.ShowDrift" class="com.codebinddocs.intellij.actions.CbdShowDriftAction" text="CBD: Show Binding Drift"/>
+      <action id="Cbd.RefreshDocHash" class="com.codebinddocs.intellij.actions.CbdRefreshDocHashAction" text="CBD: Refresh Doc contentHash"/>
+      <action id="Cbd.RefreshAllHashes" class="com.codebinddocs.intellij.actions.CbdRefreshAllHashesAction" text="CBD: Mark All Docs Checked (contentHash)"/>
+      <action id="Cbd.RefreshTree" class="com.codebinddocs.intellij.actions.CbdRefreshTreeAction" text="CBD: Refresh Doc Tree" icon="AllIcons.Actions.Refresh"/>
+      <action id="Cbd.AcceptRange" class="com.codebinddocs.intellij.actions.CbdAcceptRangeAction" text="CBD: 确认代码块选区"/>
+      <action id="Cbd.CancelRange" class="com.codebinddocs.intellij.actions.CbdCancelRangeAction" text="CBD: 取消代码块选区"/>
+    </group>
+    <action id="Cbd.BindFolderShortcut" class="com.codebinddocs.intellij.actions.CbdBindCurrentFolderAction" text="CBD: Bind Doc to Folder">
+      <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+    </action>
+  </actions>
+</idea-plugin>
