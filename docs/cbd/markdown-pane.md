@@ -11,7 +11,7 @@ cbd:
 
 优先用 JCEF 加载 Vditor。平台 **2026.2** 起 JCEF 不在 core 里，必须声明 `com.intellij.modules.jcef`（optional + `config-file`），否则 `JBCefApp` 对插件 classloader 不可见，Initialize 会直接炸掉。探测时捕获 `ClassNotFoundException` / `LinkageError`；不可用时退到简易 HTML，避免工具窗创建失败。
 
-`pane.js` 点按钮时用 `console.log('__CBD_MSG__'+json)` 回传（不依赖 JSQuery 是否已注入）；主页 / 后退 / 新建关联走同一条通道。不在主页时「后退」可回到主页。
+`pane.js` 点按钮时用 `console.log('__CBD_MSG__'+json)` 回传（不依赖 JSQuery 是否已注入）；主页 / 后退 / 新建关联走同一条通道。不在主页时「后退」可回到主页。JSQuery 用 `JBCefJSQuery.create(JBCefBrowserBase)`，避免即将删除的 `create(JBCefBrowser)` 重载。文档防抖保存用 Swing `Timer`，不用已废弃的 `Alarm`。
 
 Vditor 默认把表格设成 `display:block; overflow:auto`，滚轮在表头附近会被截胡，文档滚不回顶部。面板 CSS 取消表格独立滚动，并把嵌套元素上的纵向滚轮交给 `.vditor-reset`。
 

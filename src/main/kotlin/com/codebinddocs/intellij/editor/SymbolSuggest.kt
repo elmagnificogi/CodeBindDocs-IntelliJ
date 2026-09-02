@@ -14,12 +14,12 @@ import com.intellij.psi.PsiWhiteSpace
 object SymbolSuggest {
     fun enclosingName(project: Project, file: VirtualFile, startLine: Int, endLine: Int): String? {
         return try {
-            ReadAction.compute<String?, RuntimeException> {
-                val psiFile = PsiManager.getInstance(project).findFile(file) ?: return@compute null
+            ReadAction.nonBlocking<String?> {
+                val psiFile = PsiManager.getInstance(project).findFile(file) ?: return@nonBlocking null
                 val doc = FileDocumentManager.getInstance().getDocument(file)
                     ?: psiFile.viewProvider.document
-                    ?: return@compute null
-                if (doc.lineCount <= 0) return@compute null
+                    ?: return@nonBlocking null
+                if (doc.lineCount <= 0) return@nonBlocking null
                 val from = (startLine - 1).coerceIn(0, doc.lineCount - 1)
                 val to = (endLine - 1).coerceIn(from, doc.lineCount - 1)
                 var line = from
@@ -35,12 +35,12 @@ object SymbolSuggest {
                 while (current != null && current !is PsiFile) {
                     if (current is PsiNameIdentifierOwner && isBindableOwner(current)) {
                         val name = stripSymbolNoise(current.name ?: "")
-                        if (name.isNotEmpty()) return@compute name
+                        if (name.isNotEmpty()) return@nonBlocking name
                     }
                     current = current.parent
                 }
                 null
-            }
+            }.executeSynchronously()
         } catch (_: Exception) {
             null
         }

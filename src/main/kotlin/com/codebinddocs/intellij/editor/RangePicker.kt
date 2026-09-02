@@ -12,12 +12,7 @@ import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.IdeFocusManager
-import com.intellij.openapi.wm.StatusBar
-import com.intellij.openapi.wm.StatusBarWidget
-import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.EditorNotificationPanel
-import com.intellij.util.Consumer
-import java.awt.event.MouseEvent
 import javax.swing.JComponent
 
 class RangePicker(private val project: Project) : Disposable {
@@ -54,7 +49,6 @@ class RangePicker(private val project: Project) : Disposable {
         }
         pending = Pending(file, onDone)
         attachBanner(file)
-        tryAddStatusWidgets()
         refreshStatus()
         focusEditor()
     }
@@ -107,15 +101,6 @@ class RangePicker(private val project: Project) : Disposable {
         banner = fileEditor to panel
     }
 
-    private fun tryAddStatusWidgets() {
-        try {
-            val bar = WindowManager.getInstance().getStatusBar(project) ?: return
-            bar.addWidget(ConfirmWidget(), "before Position", this)
-            bar.addWidget(CancelWidget(), "before Position", this)
-        } catch (_: Exception) {
-        }
-    }
-
     private fun clearUi() {
         try {
             banner?.let { (fe, comp) ->
@@ -124,13 +109,6 @@ class RangePicker(private val project: Project) : Disposable {
         } catch (_: Exception) {
         }
         banner = null
-        try {
-            WindowManager.getInstance().getStatusBar(project)?.let {
-                it.removeWidget(CONFIRM_ID)
-                it.removeWidget(CANCEL_ID)
-            }
-        } catch (_: Exception) {
-        }
     }
 
     private fun focusEditor() {
@@ -148,32 +126,5 @@ class RangePicker(private val project: Project) : Disposable {
             CbdProjectService.getInstance(project).splitSync.updateStatus()
         } catch (_: Exception) {
         }
-    }
-
-    inner class ConfirmWidget : StatusBarWidget, StatusBarWidget.TextPresentation {
-        override fun ID(): String = CONFIRM_ID
-        override fun install(statusBar: StatusBar) {}
-        override fun dispose() {}
-        override fun getPresentation(): StatusBarWidget.WidgetPresentation = this
-        override fun getText(): String = "确认代码块选区"
-        override fun getAlignment(): Float = 0f
-        override fun getTooltipText(): String = "在编辑器中选好代码后点击确认"
-        override fun getClickConsumer(): Consumer<MouseEvent> = Consumer { accept() }
-    }
-
-    inner class CancelWidget : StatusBarWidget, StatusBarWidget.TextPresentation {
-        override fun ID(): String = CANCEL_ID
-        override fun install(statusBar: StatusBar) {}
-        override fun dispose() {}
-        override fun getPresentation(): StatusBarWidget.WidgetPresentation = this
-        override fun getText(): String = "取消选区"
-        override fun getAlignment(): Float = 0f
-        override fun getTooltipText(): String = "取消代码块绑定"
-        override fun getClickConsumer(): Consumer<MouseEvent> = Consumer { cancel() }
-    }
-
-    companion object {
-        const val CONFIRM_ID = "CbdRangeConfirm"
-        const val CANCEL_ID = "CbdRangeCancel"
     }
 }

@@ -1,20 +1,18 @@
 package com.codebinddocs.intellij.ui
 
-import com.intellij.ide.plugins.PluginManagerCore
 import com.intellij.openapi.application.PathManager
-import com.intellij.openapi.extensions.PluginId
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption
+import java.security.MessageDigest
 import kotlin.io.path.exists
 
 object WebviewAssets {
     fun extract(): Path {
-        val dir = Path.of(PathManager.getPluginTempPath(), "codebinddocs-webview")
+        val dir = PathManager.getSystemDir().resolve("codebinddocs-webview")
         Files.createDirectories(dir)
         val marker = dir.resolve(".stamp")
-        val plugin = PluginManagerCore.getPlugin(PluginId.getId("com.codebinddocs.plugin"))
-        val stamp = plugin?.version ?: "dev"
+        val stamp = resourceFingerprint("/webview/pane.js")
         copyResource("/webview/pane.html", dir.resolve("pane.html"))
         copyResource("/webview/pane.css", dir.resolve("pane.css"))
         copyResource("/webview/pane.js", dir.resolve("pane.js"))
@@ -23,6 +21,12 @@ object WebviewAssets {
             marker.toFile().writeText(stamp)
         }
         return dir
+    }
+
+    private fun resourceFingerprint(classpath: String): String {
+        val bytes = javaClass.getResourceAsStream(classpath)?.use { it.readBytes() } ?: return "dev"
+        val digest = MessageDigest.getInstance("SHA-256").digest(bytes)
+        return digest.take(8).joinToString("") { "%02x".format(it) }
     }
 
     private fun copyResource(classpath: String, dest: Path) {

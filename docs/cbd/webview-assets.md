@@ -7,7 +7,7 @@ cbd:
 
 ## 概述
 
-把插件内 pane.html/js 与 Vditor 解压到临时目录供 JCEF file:// 加载。每次启动都覆盖 pane.html/css/js，避免旧脚本留在缓存里导致按钮无响应。插件 ID 为 `com.codebinddocs.plugin`（市场不允许 ID 含 `intellij`）。
+把插件内 pane.html/js 与 Vditor 解压到 `PathManager.getSystemDir()/codebinddocs-webview`，供 JCEF file:// 加载（不用即将删除的 `getPluginTempPath()`）。每次启动都覆盖 pane.html/css/js，避免旧脚本留在缓存里导致按钮无响应。Vditor 是否重解压用 `pane.js` 内容指纹判断，不读 `PluginManagerCore.getPlugin`（2026.2 起为内部 API）。
 
 ## 约束
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.15
+
+- 市场 Verifier（2026.2）：Vditor 缓存改放到 `PathManager.getSystemDir()`，不再调用即将删除的 `getPluginTempPath()`
+- 符号名推断改用 `ReadAction.nonBlocking`，避开已废弃的 `ReadAction.compute(ThrowableComputable)`
+- 改绑选源文件不再调用已废弃的 `FileChooserDescriptorFactory.createSingleFileDescriptor()`，改为公开的 `FileChooserDescriptor` 构造函数
+
+## 0.1.14
+
+- 市场 Verifier：去掉状态栏 `addWidget` / `removeWidget`（内部 API）；选区确认/取消仍用编辑器顶部横幅
+- 不再调用 `PluginManagerCore.getPlugin`（2026.2 内部 API）；Vditor 缓存改用 `pane.js` 指纹
+- 文档保存防抖改为 Swing `Timer`，JSQuery 改走 `create(JBCefBrowserBase)`，避开废弃 / 即将删除 API
+
 ## 0.1.13
 
 - 市场校验：插件 ID 改为 `com.codebinddocs.plugin`（ID 不能含 intellij）；简介改为英文开头；JCEF 可选依赖补上 `config-file`

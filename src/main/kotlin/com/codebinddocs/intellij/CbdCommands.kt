@@ -16,7 +16,7 @@ import com.codebinddocs.core.findOverlapsWithExisting
 import com.codebinddocs.intellij.drift.refreshBindingHash
 import com.codebinddocs.intellij.editor.SymbolSuggest
 import com.intellij.openapi.fileChooser.FileChooser
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.vfs.LocalFileSystem
@@ -215,7 +215,7 @@ class CbdCommands(private val svc: CbdProjectService) {
     fun bindCurrentFolder(folder: VirtualFile? = null) {
         val store = svc.store() ?: return
         val picked = folder ?: FileChooser.chooseFile(
-            FileChooserDescriptorFactory.createSingleFolderDescriptor().withTitle("选择要绑定的文件夹"),
+            FileChooserDescriptor(false, true, false, false, false, false).withTitle("选择要绑定的文件夹"),
             project,
             findVf(store.workspaceRoot),
         ) ?: return
@@ -413,7 +413,7 @@ class CbdCommands(private val svc: CbdProjectService) {
         val previousSymbol = binding.anchors.firstOrNull()?.symbol
         val wasRange = binding.target.kind == BindingKind.RANGE
         val picked = FileChooser.chooseFile(
-            FileChooserDescriptorFactory.createSingleFileDescriptor().withTitle("为 $docRel 选择源文件"),
+            FileChooserDescriptor(true, false, false, false, false, false).withTitle("为 $docRel 选择源文件"),
             project,
             findVf(store.workspacePath(binding.target.path)),
         ) ?: return

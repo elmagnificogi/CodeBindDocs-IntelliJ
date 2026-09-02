@@ -7,7 +7,7 @@ cbd:
 
 ## 概述
 
-从代码块选区推断函数/类名：优先沿 PSI 向上找方法/类，失败再走 `guessDeclName` 启发式（含 Java 方法签名）。
+从代码块选区推断函数/类名：优先沿 PSI 向上找方法/类，失败再走 `guessDeclName` 启发式（含 Java 方法签名）。读 PSI 用 `ReadAction.nonBlocking { }.executeSynchronously()`，避免 2026.2 已废弃的 `ReadAction.compute(ThrowableComputable)`。
 
 ## 约束
 

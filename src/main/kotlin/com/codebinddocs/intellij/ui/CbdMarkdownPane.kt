@@ -26,7 +26,6 @@ import com.intellij.ui.jcef.JBCefApp
 import com.intellij.ui.jcef.JBCefBrowser
 import com.intellij.ui.jcef.JBCefBrowserBase
 import com.intellij.ui.jcef.JBCefJSQuery
-import com.intellij.util.Alarm
 import org.cef.CefSettings
 import org.cef.browser.CefBrowser
 import org.cef.browser.CefFrame
@@ -37,6 +36,7 @@ import java.nio.file.Files
 import java.util.Base64
 import javax.swing.JEditorPane
 import javax.swing.JPanel
+import javax.swing.Timer
 import javax.swing.event.HyperlinkEvent
 import kotlin.io.path.exists
 import kotlin.io.path.readText
@@ -57,7 +57,12 @@ class CbdMarkdownPane(private val svc: CbdProjectService) : Disposable {
     private var header: String? = null
     private var imageReverse = mutableMapOf<String, String>()
     private val gson = Gson()
-    private val alarm = Alarm(Alarm.ThreadToUse.SWING_THREAD, this)
+    private var pendingSave: Pair<String, String>? = null
+    private val saveTimer = Timer(400) {
+        val job = pendingSave ?: return@Timer
+        pendingSave = null
+        persist(job.first, job.second)
+    }.apply { isRepeats = false }
     private val history = mutableListOf<NavEntry>()
     private var historyIndex = -1
     private var navigatingHistory = false
@@ -114,7 +119,7 @@ class CbdMarkdownPane(private val svc: CbdProjectService) : Disposable {
             }
         }
         browser = b
-        jsQuery = JBCefJSQuery.create(b as JBCefBrowserBase)
+        jsQuery = createJsQuery(b)
         jsQuery!!.addHandler { payload ->
             enqueueHostMessage(payload)
             null
@@ -457,9 +462,12 @@ class CbdMarkdownPane(private val svc: CbdProjectService) : Disposable {
 
     private fun scheduleSave(markdown: String) {
         val docRel = currentDocRel ?: return
-        alarm.cancelAllRequests()
-        alarm.addRequest({ persist(docRel, markdown) }, 400)
+        pendingSave = docRel to markdown
+        saveTimer.restart()
     }
+
+    private fun createJsQuery(browser: JBCefBrowserBase): JBCefJSQuery =
+        JBCefJSQuery.create(browser)
 
     private fun persist(docRel: String, markdown: String) {
         val store = svc.storeOrNull() ?: return
@@ -550,6 +558,8 @@ class CbdMarkdownPane(private val svc: CbdProjectService) : Disposable {
         s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
 
     override fun dispose() {
+        saveTimer.stop()
+        pendingSave = null
         jsQuery = null
         browser?.dispose()
         browser = null
