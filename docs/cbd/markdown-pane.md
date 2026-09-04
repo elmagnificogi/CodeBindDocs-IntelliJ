@@ -13,6 +13,8 @@ cbd:
 
 `pane.js` 点按钮时用 `console.log('__CBD_MSG__'+json)` 回传（不依赖 JSQuery 是否已注入）；主页 / 后退 / 新建关联走同一条通道。不在主页时「后退」可回到主页。JSQuery 用 `JBCefJSQuery.create(JBCefBrowserBase)`，避免即将删除的 `create(JBCefBrowser)` 重载。文档防抖保存用 Swing `Timer`，不用已废弃的 `Alarm`。
 
+工具栏 **Code** 发 `openTarget`。file 绑定的 `startLine`/`endLine` 是 JSON `null`，不能对 `JsonNull` 调 Gson `asInt`（会抛错，看起来像点了没反应）；用跳过 null 的取值后再调用 `revealSourceRange`。
+
 Vditor 默认把表格设成 `display:block; overflow:auto`，滚轮在表头附近会被截胡，文档滚不回顶部。面板 CSS 取消表格独立滚动，并把嵌套元素上的纵向滚轮交给 `.vditor-reset`。
 
 Vditor 3.11.2 的 `resize()` 不接受高度参数；构造时若写入像素高度（预热时 `#editorRoot.warming` 只有 700px），编辑区会永远矮于大纲。面板用 `height: 100%` 加 flex 拉满工具窗，大纲与 IR 同高。

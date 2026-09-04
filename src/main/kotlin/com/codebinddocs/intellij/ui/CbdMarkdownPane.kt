@@ -416,14 +416,10 @@ class CbdMarkdownPane(private val svc: CbdProjectService) : Disposable {
             "openDoc" -> svc.commands.openDoc(obj.get("docRel")?.asString)
             "deleteDoc" -> svc.commands.deleteDoc(obj.get("docRel")?.asString)
             "openTarget" -> svc.commands.revealSourceRange(
-                obj.get("sourceRel")?.asString,
-                obj.get("startLine")?.asInt,
-                obj.get("endLine")?.asInt,
-                when (obj.get("kind")?.asString) {
-                    "range" -> BindingKind.RANGE
-                    "directory" -> BindingKind.DIRECTORY
-                    else -> BindingKind.FILE
-                },
+                jsonString(obj, "sourceRel"),
+                jsonInt(obj, "startLine"),
+                jsonInt(obj, "endLine"),
+                BindingKind.fromYaml(jsonString(obj, "kind")),
             )
             "rebindDoc" -> svc.commands.rebindDoc(obj.get("docRel")?.asString)
             "retightenRange" -> svc.commands.retightenRange(obj.get("docRel")?.asString)
@@ -507,6 +503,26 @@ class CbdMarkdownPane(private val svc: CbdProjectService) : Disposable {
         "canBack" to (historyIndex > 0 || !isHome),
         "canForward" to (historyIndex >= 0 && historyIndex < history.lastIndex),
     )
+
+    private fun jsonString(obj: JsonObject, key: String): String? {
+        val el = obj.get(key) ?: return null
+        if (el.isJsonNull || !el.isJsonPrimitive) return null
+        return try {
+            el.asString
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun jsonInt(obj: JsonObject, key: String): Int? {
+        val el = obj.get(key) ?: return null
+        if (el.isJsonNull || !el.isJsonPrimitive) return null
+        return try {
+            el.asInt
+        } catch (_: Exception) {
+            null
+        }
+    }
 
     private fun enqueueHostMessage(payload: String) {
         ApplicationManager.getApplication().invokeLater(

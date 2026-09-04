@@ -15,6 +15,8 @@ import com.codebinddocs.core.suggestSymbolFromLines
 import com.codebinddocs.core.findOverlapsWithExisting
 import com.codebinddocs.intellij.drift.refreshBindingHash
 import com.codebinddocs.intellij.editor.SymbolSuggest
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.fileChooser.FileChooser
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -22,6 +24,7 @@ import com.intellij.openapi.fileEditor.OpenFileDescriptor
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.wm.IdeFocusManager
 import java.nio.file.Files
 import kotlin.io.path.exists
 import kotlin.io.path.readText
@@ -323,6 +326,7 @@ class CbdCommands(private val svc: CbdProjectService) {
             com.intellij.ide.projectView.ProjectView.getInstance(project).select(null, vf, true)
             return
         }
+        svc.splitSync.suppressEditorSync()
         val descriptor = if (start != null) {
             OpenFileDescriptor(project, vf, (start - 1).coerceAtLeast(0), 0)
         } else {
@@ -337,6 +341,16 @@ class CbdCommands(private val svc: CbdProjectService) {
             editor.caretModel.moveToOffset(doc.getLineStartOffset(s))
             editor.scrollingModel.scrollToCaret(com.intellij.openapi.editor.ScrollType.CENTER)
         }
+        focusSourceEditor(editor)
+    }
+
+    private fun focusSourceEditor(editor: Editor) {
+        val run = Runnable {
+            if (project.isDisposed) return@Runnable
+            IdeFocusManager.getInstance(project).requestFocus(editor.contentComponent, true)
+        }
+        val app = ApplicationManager.getApplication()
+        if (app.isDispatchThread) app.invokeLater(run) else app.invokeLater(run)
     }
 
     fun deleteDoc(docRelArg: String? = null) {

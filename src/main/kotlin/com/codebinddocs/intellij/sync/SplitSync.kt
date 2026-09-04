@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit
 
 class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener, Disposable {
     private var syncing = false
+    private var suppressUntil = 0L
     private val scheduler = Executors.newSingleThreadScheduledExecutor()
     private var caretFuture: ScheduledFuture<*>? = null
     private val caretListener = object : CaretListener {
@@ -41,6 +42,10 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
         scheduler.schedule({
             onEdt { syncNow() }
         }, 400, TimeUnit.MILLISECONDS)
+    }
+
+    fun suppressEditorSync(ms: Long = 500) {
+        suppressUntil = System.currentTimeMillis() + ms
     }
 
     fun isEnabled(): Boolean = svc.settings.stored.splitSyncEnabled
@@ -138,6 +143,7 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
 
     private fun syncForEditor(forceFocus: Boolean) {
         if (syncing) return
+        if (System.currentTimeMillis() < suppressUntil) return
         if (svc.rangePicker.isPicking()) return
         val store = svc.storeOrNull() ?: return
         if (!store.exists()) return
@@ -170,7 +176,11 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
 
     private fun ensureToolWindow(activate: Boolean) {
         val tw = ToolWindowManager.getInstance(svc.project).getToolWindow("CodeBind Docs") ?: return
-        if (activate || isEnabled()) tw.show()
+        if (activate) {
+            tw.activate(null)
+            return
+        }
+        if (!tw.isVisible && isEnabled()) tw.show()
     }
 
     private fun onEdt(action: () -> Unit) {

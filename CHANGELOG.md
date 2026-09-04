@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.16
+
+- 修复打开文档后点工具栏 **Code** 无法跳到对应源码：JSON `null` 行号不再把 Gson `asInt` 打崩，并在打开后把焦点还给编辑器
+
 ## 0.1.15
 
 - 市场 Verifier（2026.2）：Vditor 缓存改放到 `PathManager.getSystemDir()`，不再调用即将删除的 `getPluginTempPath()`
