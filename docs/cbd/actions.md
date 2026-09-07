@@ -7,7 +7,7 @@ cbd:
 
 ## 概述
 
-AnAction 入口，全部转发到 CbdCommands / RangePicker。
+AnAction 入口，全部转发到 CbdCommands / RangePicker。`plugin.xml` 里命令 `text` 与 VS Code 版英文名一致，便于 Search Everywhere 对上；`description` 用中文，作为菜单/动作说明。
 
 ## 约束
 

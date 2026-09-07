@@ -3,7 +3,10 @@
   <name>CodeBind Docs</name>
   <vendor url="https://github.com/elmagnificogi/CodeBindDocs-IntelliJ">codebinddocs</vendor>
   <description><![CDATA[CodeBind Docs binds design documents to source files in JetBrains IDEs without modifying the code. Docs live as local Git-friendly Markdown and open beside the editor when you switch files.
-<p>Works in IntelliJ IDEA, Android Studio, PyCharm, WebStorm, GoLand, CLion, PhpStorm, Rider, DataGrip, and other IntelliJ-based IDEs. Supports file / range / directory bindings, drift detection, Vditor live preview, and AGENTS.md scaffolding. The YAML header is compatible with the VS Code / Cursor extension.</p>]]></description>
+<p>Works in IntelliJ IDEA, Android Studio, PyCharm, WebStorm, GoLand, CLion, PhpStorm, Rider, DataGrip, and other IntelliJ-based IDEs. Supports file / range / directory bindings, drift detection, Vditor live preview, and AGENTS.md scaffolding. The YAML header is compatible with the VS Code / Cursor extension.</p>
+<p><b>中文说明</b></p>
+<p>CodeBind Docs 把设计文档绑定到源文件，不修改源码。文档是本地、可 Git 的 Markdown，切换文件时在编辑器旁打开。</p>
+<p>适用于 IntelliJ IDEA、Android Studio、PyCharm、WebStorm、GoLand、CLion、PhpStorm、Rider、DataGrip 等基于 IntelliJ 平台的 IDE。支持整文件 / 代码块 / 目录绑定、漂移检测、Vditor 即时预览，以及 AGENTS.md 脚手架。YAML 文件头与 VS Code / Cursor 扩展兼容。</p>]]></description>
   <depends>com.intellij.modules.platform</depends>
   <!-- 2026.2 起 JCEF 从平台拆出；optional + config-file 以便无 JCEF 时仍能加载插件。 -->
   <depends optional="true" config-file="cbd-jcef.xml">com.intellij.modules.jcef</depends>
@@ -22,27 +25,27 @@
     <group id="Cbd.Menu" text="CodeBind Docs" popup="true">
       <add-to-group group-id="ToolsMenu" anchor="last"/>
       <action id="Cbd.Initialize" class="com.codebinddocs.intellij.actions.CbdInitializeAction" text="CBD: Initialize" description="初始化文档目录与 Agent 脚手架"/>
-      <action id="Cbd.BindCurrentFile" class="com.codebinddocs.intellij.actions.CbdBindCurrentFileAction" text="CBD: Bind Doc to Current File"/>
-      <action id="Cbd.BindCurrentFolder" class="com.codebinddocs.intellij.actions.CbdBindCurrentFolderAction" text="CBD: Bind Doc to Folder"/>
-      <action id="Cbd.RevealBoundDoc" class="com.codebinddocs.intellij.actions.CbdRevealBoundDocAction" text="CBD: Reveal Bound Doc">
+      <action id="Cbd.BindCurrentFile" class="com.codebinddocs.intellij.actions.CbdBindCurrentFileAction" text="CBD: Bind Doc to Current File" description="为当前源文件新建绑定文档"/>
+      <action id="Cbd.BindCurrentFolder" class="com.codebinddocs.intellij.actions.CbdBindCurrentFolderAction" text="CBD: Bind Doc to Folder" description="为当前文件夹新建目录绑定"/>
+      <action id="Cbd.RevealBoundDoc" class="com.codebinddocs.intellij.actions.CbdRevealBoundDocAction" text="CBD: Reveal Bound Doc" description="打开当前源文件的绑定文档">
         <keyboard-shortcut keymap="$default" first-keystroke="control alt D"/>
       </action>
-      <action id="Cbd.ToggleSplitSync" class="com.codebinddocs.intellij.actions.CbdToggleSplitSyncAction" text="CBD: Toggle Split Sync">
+      <action id="Cbd.ToggleSplitSync" class="com.codebinddocs.intellij.actions.CbdToggleSplitSyncAction" text="CBD: Toggle Split Sync" description="开关打开源文件时自动显示文档">
         <keyboard-shortcut keymap="$default" first-keystroke="control alt shift D"/>
       </action>
-      <action id="Cbd.OpenDocsIndex" class="com.codebinddocs.intellij.actions.CbdOpenDocsIndexAction" text="CBD: Open Docs Index" icon="AllIcons.Nodes.HomeFolder"/>
-      <action id="Cbd.RevealSourceRange" class="com.codebinddocs.intellij.actions.CbdRevealSourceRangeAction" text="CBD: Reveal Source Range"/>
-      <action id="Cbd.DeleteDoc" class="com.codebinddocs.intellij.actions.CbdDeleteDocAction" text="CBD: Delete Bound Doc"/>
-      <action id="Cbd.RebindDoc" class="com.codebinddocs.intellij.actions.CbdRebindDocAction" text="CBD: Rebind Doc to Source"/>
-      <action id="Cbd.RetightenRange" class="com.codebinddocs.intellij.actions.CbdRetightenRangeAction" text="CBD: Retighten Range by Symbol"/>
-      <action id="Cbd.ShowDrift" class="com.codebinddocs.intellij.actions.CbdShowDriftAction" text="CBD: Show Binding Drift"/>
-      <action id="Cbd.RefreshDocHash" class="com.codebinddocs.intellij.actions.CbdRefreshDocHashAction" text="CBD: Refresh Doc contentHash"/>
-      <action id="Cbd.RefreshAllHashes" class="com.codebinddocs.intellij.actions.CbdRefreshAllHashesAction" text="CBD: Mark All Docs Checked (contentHash)"/>
-      <action id="Cbd.RefreshTree" class="com.codebinddocs.intellij.actions.CbdRefreshTreeAction" text="CBD: Refresh Doc Tree" icon="AllIcons.Actions.Refresh"/>
-      <action id="Cbd.AcceptRange" class="com.codebinddocs.intellij.actions.CbdAcceptRangeAction" text="CBD: 确认代码块选区"/>
-      <action id="Cbd.CancelRange" class="com.codebinddocs.intellij.actions.CbdCancelRangeAction" text="CBD: 取消代码块选区"/>
+      <action id="Cbd.OpenDocsIndex" class="com.codebinddocs.intellij.actions.CbdOpenDocsIndexAction" text="CBD: Open Docs Index" description="打开文档主页" icon="AllIcons.Nodes.HomeFolder"/>
+      <action id="Cbd.RevealSourceRange" class="com.codebinddocs.intellij.actions.CbdRevealSourceRangeAction" text="CBD: Reveal Source Range" description="从文档跳到绑定的源码范围"/>
+      <action id="Cbd.DeleteDoc" class="com.codebinddocs.intellij.actions.CbdDeleteDocAction" text="CBD: Delete Bound Doc" description="删除绑定文档"/>
+      <action id="Cbd.RebindDoc" class="com.codebinddocs.intellij.actions.CbdRebindDocAction" text="CBD: Rebind Doc to Source" description="把文档改绑到新源文件或新粒度"/>
+      <action id="Cbd.RetightenRange" class="com.codebinddocs.intellij.actions.CbdRetightenRangeAction" text="CBD: Retighten Range by Symbol" description="按符号名重算代码块行号"/>
+      <action id="Cbd.ShowDrift" class="com.codebinddocs.intellij.actions.CbdShowDriftAction" text="CBD: Show Binding Drift" description="查看绑定漂移与处理建议"/>
+      <action id="Cbd.RefreshDocHash" class="com.codebinddocs.intellij.actions.CbdRefreshDocHashAction" text="CBD: Refresh Doc contentHash" description="将当前文档标记为已核对"/>
+      <action id="Cbd.RefreshAllHashes" class="com.codebinddocs.intellij.actions.CbdRefreshAllHashesAction" text="CBD: Mark All Docs Checked (contentHash)" description="将全部文档标记为已核对"/>
+      <action id="Cbd.RefreshTree" class="com.codebinddocs.intellij.actions.CbdRefreshTreeAction" text="CBD: Refresh Doc Tree" description="重扫绑定并刷新侧栏与主页" icon="AllIcons.Actions.Refresh"/>
+      <action id="Cbd.AcceptRange" class="com.codebinddocs.intellij.actions.CbdAcceptRangeAction" text="CBD: 确认代码块选区" description="确认当前选中的代码块范围"/>
+      <action id="Cbd.CancelRange" class="com.codebinddocs.intellij.actions.CbdCancelRangeAction" text="CBD: 取消代码块选区" description="取消代码块选区"/>
     </group>
-    <action id="Cbd.BindFolderShortcut" class="com.codebinddocs.intellij.actions.CbdBindCurrentFolderAction" text="CBD: Bind Doc to Folder">
+    <action id="Cbd.BindFolderShortcut" class="com.codebinddocs.intellij.actions.CbdBindCurrentFolderAction" text="CBD: Bind Doc to Folder" description="为当前文件夹新建目录绑定">
       <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
     </action>
   </actions>
