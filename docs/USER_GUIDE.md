@@ -37,14 +37,14 @@
 
 | 操作 | 说明 |
 |------|------|
-| 自动分栏 | 默认开启。切换源文件时右侧文档跟随。设置 `splitSyncEnabled`；快捷键 `Ctrl+Alt+Shift+D` |
+| 文档跟随 | 默认开启。**仅当右侧文档面板已经打开时**，切换源文件会更新文档；面板隐藏时打开代码不会弹出。设置 `splitSyncEnabled`；快捷键 `Ctrl+Alt+Shift+D` |
 | 打开当前绑定 | `Ctrl+Alt+D` / 状态栏 CBD / 源码上方 Inlay（`CBD: Reveal Bound Doc`） |
 | 主页 | `CBD: Open Docs Index`：绑定树、覆盖率、漂移提醒 |
 | 侧栏 | 左侧 **CBD Bindings**：已绑定 / 待绑定 |
 | 跳回代码 | 文档工具栏 **Code** 或 `CBD: Reveal Source Range` |
 | 代码块选区 | 绑定 range 时在编辑器拖选，点编辑器顶部「确认选区」（非模态） |
 
-关闭自动分栏后，打开代码不再强制弹出文档窗；仍可用 `Ctrl+Alt+D` 或状态栏打开。无绑定时会显示「无关联文档」，可从中新建（由设置「无绑定时显示新建入口」控制）。
+关闭文档跟随后，即使面板开着也不会随代码切换。需要看文档时用 `Ctrl+Alt+D`、状态栏或 Inlay 打开（这才会弹出面板）。面板已打开且无绑定时会显示「无关联文档」，可从中新建（由设置「无绑定时显示新建入口」控制）。
 
 同一文件可有多个代码块绑定，外加至多一个整文件绑定。光标落在某 range 内时优先显示**最窄**文档。
 
@@ -114,8 +114,8 @@ heading: 概述
 | `docsPath` | `docs/cbd` | 文档根目录（相对项目根） |
 | `assetsPath` | 空 → `{docsPath}/assets` | 图片等资源目录 |
 | `templatesPath` | 空 → `{docsPath}/_templates` | 新建文档模板；有 `.md` 则用磁盘模板 |
-| 打开源文件时自动显示绑定文档 | 开 | 即 `splitSyncEnabled` |
-| 无绑定时显示新建入口 | 开 | 自动分栏开启时是否提示新建 |
+| 文档面板打开时，切换源文件自动跟随 | 开 | 即 `splitSyncEnabled`；**不会**在面板隐藏时强制弹出 |
+| 无绑定时显示新建入口 | 开 | 面板已打开且无绑定时是否提示新建 |
 | 文档面板位置 | `Beside` | `Beside` 或 `Two` |
 | 编辑模式 | `ir` | `ir` 即时渲染 / `source` 纯文本 |
 | 即时渲染右侧显示大纲 | 开 | 修改后对已打开面板即时生效 |
@@ -127,7 +127,7 @@ heading: 概述
 | 快捷键 | 命令 |
 |--------|------|
 | `Ctrl+Alt+D` | 打开当前代码的绑定文档 |
-| `Ctrl+Alt+Shift+D` | 开关自动分栏 |
+| `Ctrl+Alt+Shift+D` | 开关文档跟随（不控制是否弹出面板） |
 
 ---
 
@@ -149,7 +149,7 @@ heading: 概述
 | `CBD: Show Binding Drift` | 查看并处理漂移 |
 | `CBD: Refresh Doc contentHash` | 单篇标记已核对 |
 | `CBD: Mark All Docs Checked (contentHash)` | 全部标记已核对 |
-| `CBD: Toggle Split Sync` | 开关自动分栏（`Ctrl+Alt+Shift+D`） |
+| `CBD: Toggle Split Sync` | 开关文档跟随（`Ctrl+Alt+Shift+D`）；隐藏面板时不会自动弹出 |
 | `CBD: Refresh Doc Tree` | 重扫绑定并刷新侧栏、主页、`cbd-index.md` 与漂移 |
 | `CBD: 确认代码块选区` / `CBD: 取消代码块选区` | 代码块绑定进行中时确认或取消选区 |
 
@@ -192,7 +192,7 @@ Initialize 会生成：
 确认打开的是项目文件夹；Search Everywhere 能搜到 `CBD: Initialize`。
 
 **Q: 右侧不出现文档 / 面板空白？**  
-先看自动分栏是否开启、该文件是否已绑定。2026.2+ 请启用 **Web Browser (JCEF)** 后重启。无 JCEF 时仍可用左侧 **CBD Bindings** 打开 Markdown。
+先看文档面板是否已打开、该文件是否已绑定。面板隐藏时打开代码不会自动弹出文档，请用 `Ctrl+Alt+D`。2026.2+ 请启用 **Web Browser (JCEF)** 后重启。无 JCEF 时仍可用左侧 **CBD Bindings** 打开 Markdown。
 
 **Q: 点文档工具栏 Code 没有跳到源码？**  
 请用 0.1.16 及以上版本；应打开并聚焦对应源文件，range 绑定还会选中行范围。

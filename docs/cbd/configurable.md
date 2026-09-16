@@ -7,7 +7,7 @@ cbd:
 
 ## 概述
 
-Settings → Tools → CodeBind Docs 配置页。
+Settings → Tools → CodeBind Docs 配置页。`splitSyncEnabled` 只控制「面板已打开时是否跟随源文件」，不负责强制弹出文档窗。
 
 ## 约束
 

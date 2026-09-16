@@ -17,7 +17,7 @@ class CbdConfigurable(private val project: Project) : BoundSearchableConfigurabl
                 row("模板目录 templatesPath:") { textField().bindText(state::templatesPath).comment("留空则 {docsPath}/_templates") }
             }
             group("分栏同步") {
-                row { checkBox("打开源文件时自动显示绑定文档").bindSelected(state::splitSyncEnabled) }
+                row { checkBox("文档面板打开时，切换源文件自动跟随").bindSelected(state::splitSyncEnabled) }
                 row { checkBox("无绑定时显示新建入口").bindSelected(state::promptWhenUnbound) }
                 row("文档面板位置 (Beside/Two):") { textField().bindText(state::viewColumn) }
             }

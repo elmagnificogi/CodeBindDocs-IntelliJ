@@ -78,4 +78,4 @@ cbd:
 - `CBD: Show Binding Drift` — 查看绑定漂移
 - `CBD: Reveal Bound Doc` — 打开当前文件的绑定文档（`Ctrl+Alt+D`）
 - `CBD: Reveal Source Range` — 从文档跳到源码
-- `CBD: Toggle Split Sync` — 开关自动分栏（`Ctrl+Alt+Shift+D`）
+- `CBD: Toggle Split Sync` — 开关文档跟随（`Ctrl+Alt+Shift+D`）；面板隐藏时不自动弹出

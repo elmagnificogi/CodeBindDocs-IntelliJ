@@ -150,9 +150,11 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
         val file = FileEditorManager.getInstance(svc.project).selectedFiles.firstOrNull() ?: return
         val rel = store.toWorkspaceRelative(file.toNioPath()) ?: return
         if (store.isUnderDocsPath(rel)) return
-        if (!isEnabled() && !forceFocus) {
-            updateStatus()
-            return
+        if (!forceFocus) {
+            if (!isEnabled() || !isDocPaneVisible()) {
+                updateStatus()
+                return
+            }
         }
         syncing = true
         try {
@@ -168,19 +170,22 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
         canCreate: Boolean,
         dirDoc: Map<String, String>?,
     ) {
-        if (!isEnabled() && !forceFocus) return
+        if (!forceFocus) {
+            if (!isEnabled() || !isDocPaneVisible()) return
+        }
         ensureToolWindow(forceFocus)
         svc.markdownPane.showUnbound(rel, canCreate, dirDoc, forceFocus)
         updateStatus()
     }
 
+    private fun isDocPaneVisible(): Boolean {
+        val tw = ToolWindowManager.getInstance(svc.project).getToolWindow("CodeBind Docs") ?: return false
+        return tw.isVisible
+    }
+
     private fun ensureToolWindow(activate: Boolean) {
         val tw = ToolWindowManager.getInstance(svc.project).getToolWindow("CodeBind Docs") ?: return
-        if (activate) {
-            tw.activate(null)
-            return
-        }
-        if (!tw.isVisible && isEnabled()) tw.show()
+        if (activate) tw.activate(null)
     }
 
     private fun onEdt(action: () -> Unit) {

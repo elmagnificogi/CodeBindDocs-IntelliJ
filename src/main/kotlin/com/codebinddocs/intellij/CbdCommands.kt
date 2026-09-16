@@ -69,7 +69,7 @@ class CbdCommands(private val svc: CbdProjectService) {
 
                     本工作区使用 `${store.docsPath}/*.md` 的 YAML 文件头声明绑定（可用设置 `cbd.docsPath` 修改目录）。
 
-                    用 **CBD: Bind Doc to Current File** 为源文件创建文档；切换源文件即可分栏同步。
+                    用 **CBD: Bind Doc to Current File** 为源文件创建文档；文档面板打开时切换源文件会自动跟随。
                     """.trimIndent() + "\n",
                     Charsets.UTF_8,
                 )
@@ -263,9 +263,9 @@ class CbdCommands(private val svc: CbdProjectService) {
         CbdUi.info(
             project,
             if (enabled) {
-                "CBD: 已开启自动分栏（打开源文件时显示绑定文档）。关闭：设置或再按 Ctrl+Alt+Shift+D"
+                "CBD: 已开启文档跟随（仅在文档面板已打开时切换源文件会更新文档，不会自动弹出）。关闭：设置或再按 Ctrl+Alt+Shift+D"
             } else {
-                "CBD: 已关闭自动分栏。可用 Ctrl+Alt+D 一键打开当前文件的绑定文档"
+                "CBD: 已关闭文档跟随。可用 Ctrl+Alt+D 打开当前文件的绑定文档"
             },
         )
     }

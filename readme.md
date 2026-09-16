@@ -56,7 +56,7 @@
 1. 安装插件后，打开任意**项目文件夹**（单文件模式无法扫描绑定）
 2. **Tools → CodeBind Docs → CBD: Initialize**（或 Search Everywhere 搜 `CBD: Initialize`），创建默认 `docs/cbd/`、`AGENTS.md`、Cursor rules、Junie guidelines
 3. 打开一个源文件，运行 **`CBD: Bind Doc to Current File`**（整文件或代码块）；或在项目树对文件夹 **`CBD: Bind Doc to Folder`**
-4. 自动分栏开启时，切换源文件即可右侧跟随；也可随时 `Ctrl+Alt+D` 打开对应文档
+4. 文档面板已打开时，切换源文件即可右侧跟随；面板隐藏时不会自动弹出，可用 `Ctrl+Alt+D` 打开对应文档
 5. 左侧有 **CBD Bindings** 工具窗（已绑定 / 待绑定）
 
 常用入口：
@@ -65,7 +65,7 @@
 |------|------|
 | `CBD: Open Docs Index` | 文档主页 |
 | `Ctrl+Alt+D` / 源码 Inlay / 状态栏 CBD | 打开当前源文件的旁路文档 |
-| `Ctrl+Alt+Shift+D` | 开关自动分栏 |
+| `Ctrl+Alt+Shift+D` | 开关文档跟随（面板已打开时才同步，不强制弹出） |
 | 侧栏 **已绑定 / 待绑定** | 浏览与补绑 |
 | 代码块绑定 | 在编辑器中拖选，点顶部横幅 **确认选区** |
 
