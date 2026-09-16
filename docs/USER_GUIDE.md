@@ -37,7 +37,7 @@
 
 | 操作 | 说明 |
 |------|------|
-| 文档跟随 | 默认开启。**仅当右侧文档面板已经打开时**，切换源文件会更新文档；面板隐藏时打开代码不会弹出。设置 `splitSyncEnabled`；快捷键 `Ctrl+Alt+Shift+D` |
+| 文档跟随 | 默认开启。**仅当右侧文档面板已经打开时**，切换源文件会更新文档；面板隐藏时打开代码不会弹出。再次打开文档面板时，会跳到**当前**源文件对应的文档。设置 `splitSyncEnabled`；快捷键 `Ctrl+Alt+Shift+D` |
 | 打开当前绑定 | `Ctrl+Alt+D` / 状态栏 CBD / 源码上方 Inlay（`CBD: Reveal Bound Doc`） |
 | 主页 | `CBD: Open Docs Index`：绑定树、覆盖率、漂移提醒 |
 | 侧栏 | 左侧 **CBD Bindings**：已绑定 / 待绑定 |

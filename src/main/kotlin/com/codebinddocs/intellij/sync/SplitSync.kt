@@ -16,12 +16,14 @@ import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowManager
+import com.intellij.openapi.wm.ex.ToolWindowManagerListener
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 
-class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener, Disposable {
+class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener, ToolWindowManagerListener, Disposable {
     private var syncing = false
     private var suppressUntil = 0L
     private val scheduler = Executors.newSingleThreadScheduledExecutor()
@@ -67,6 +69,14 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
     override fun selectionChanged(event: FileEditorManagerEvent) {
         if (isEnabled()) syncNow(false)
         else updateStatus()
+    }
+
+    override fun toolWindowShown(toolWindow: ToolWindow) {
+        if (toolWindow.id != DOC_PANE_ID) return
+        onEdt {
+            if (isEnabled()) syncForEditor(forceFocus = false, fromPaneShown = true)
+            else updateStatus()
+        }
     }
 
     fun revealDocForFile(file: VirtualFile, forceFocus: Boolean): Boolean {
@@ -141,7 +151,7 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
         }
     }
 
-    private fun syncForEditor(forceFocus: Boolean) {
+    private fun syncForEditor(forceFocus: Boolean, fromPaneShown: Boolean = false) {
         if (syncing) return
         if (System.currentTimeMillis() < suppressUntil) return
         if (svc.rangePicker.isPicking()) return
@@ -151,7 +161,11 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
         val rel = store.toWorkspaceRelative(file.toNioPath()) ?: return
         if (store.isUnderDocsPath(rel)) return
         if (!forceFocus) {
-            if (!isEnabled() || !isDocPaneVisible()) {
+            if (!isEnabled()) {
+                updateStatus()
+                return
+            }
+            if (!fromPaneShown && !isDocPaneVisible()) {
                 updateStatus()
                 return
             }
@@ -170,21 +184,19 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
         canCreate: Boolean,
         dirDoc: Map<String, String>?,
     ) {
-        if (!forceFocus) {
-            if (!isEnabled() || !isDocPaneVisible()) return
-        }
+        if (!forceFocus && !isEnabled()) return
         ensureToolWindow(forceFocus)
         svc.markdownPane.showUnbound(rel, canCreate, dirDoc, forceFocus)
         updateStatus()
     }
 
     private fun isDocPaneVisible(): Boolean {
-        val tw = ToolWindowManager.getInstance(svc.project).getToolWindow("CodeBind Docs") ?: return false
+        val tw = ToolWindowManager.getInstance(svc.project).getToolWindow(DOC_PANE_ID) ?: return false
         return tw.isVisible
     }
 
     private fun ensureToolWindow(activate: Boolean) {
-        val tw = ToolWindowManager.getInstance(svc.project).getToolWindow("CodeBind Docs") ?: return
+        val tw = ToolWindowManager.getInstance(svc.project).getToolWindow(DOC_PANE_ID) ?: return
         if (activate) tw.activate(null)
     }
 
@@ -210,5 +222,9 @@ class SplitSync(private val svc: CbdProjectService) : FileEditorManagerListener,
     override fun dispose() {
         caretFuture?.cancel(false)
         scheduler.shutdownNow()
+    }
+
+    companion object {
+        const val DOC_PANE_ID = "CodeBind Docs"
     }
 }

@@ -38,19 +38,21 @@ gradlew.bat runIde
 - [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)：push / PR 跑 `check` + `buildPlugin`
 - [`.github/workflows/publish.yml`](../.github/workflows/publish.yml)：打 `v*` tag 后发 GitHub Release
 
-发版步骤：
+发版步骤（用户说「发版」时本地 zip 与 GitHub 必须同一轮做完）：
 
 1. 把 `gradle.properties` 的 `pluginVersion` 升到目标版（如 `0.1.14`），并在 `CHANGELOG.md` 写同名章节。
-2. 提交后打同名 tag：
+2. 提交后，**本机** `JAVA_HOME` 指到 JDK 21，跑 `gradlew.bat --no-daemon buildPlugin`，产物在 `build/distributions/CodeBindDocs-JetBrains-*.zip`，给用户本地装插件测试。
+3. 打同名 tag 并推送（与 `pluginVersion` 一致，带 `v` 前缀）：
 
 ```bash
 git tag v0.1.14
+git push origin HEAD
 git push origin v0.1.14
 ```
 
-3. tag 必须与 `pluginVersion` 一致（`v` 前缀），否则 workflow 失败。
-4. 成功后会在 GitHub **Releases** 创建同名 release，并附上 `CodeBindDocs-JetBrains-*.zip`。说明取自 `CHANGELOG.md` 对应章节。
-5. 也可在 Actions 里手动 **Run workflow**（`workflow_dispatch`）；手动跑时不做 tag 校验，也**不**创建 GitHub Release，只上传构建产物。
+4. tag 必须与 `pluginVersion` 一致，否则 workflow 失败。
+5. 成功后会在 GitHub **Releases** 创建同名 release，并附上 `CodeBindDocs-JetBrains-*.zip`。说明取自 `CHANGELOG.md` 对应章节。已配置 `PUBLISH_TOKEN` 时还会推 JetBrains Marketplace。
+6. 也可在 Actions 里手动 **Run workflow**（`workflow_dispatch`）；手动跑时不做 tag 校验，也**不**创建 GitHub Release，只上传构建产物。
 
 可选：上 JetBrains Marketplace。在 GitHub → Settings → Secrets and variables → Actions 配置：
 

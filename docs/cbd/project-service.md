@@ -9,7 +9,7 @@ cbd:
 
 项目服务枢纽：组装 IndexStore、漂移、分栏、面板、Inlay，启动扫描与脚手架写入。
 
-`start()` 里写索引、漂移扫描可在后台；路径迁移对话框、Inlay、分栏同步切到 EDT 再跑。
+`start()` 里写索引、漂移扫描可在后台；路径迁移对话框、Inlay、分栏同步切到 EDT 再跑。订阅 `ToolWindowManagerListener`，文档工具窗被用户打开时按当前编辑器同步。
 
 ## 约束
 

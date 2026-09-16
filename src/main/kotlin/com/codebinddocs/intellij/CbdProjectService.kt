@@ -17,6 +17,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.fileEditor.FileEditorManagerListener
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFileManager
+import com.intellij.openapi.wm.ex.ToolWindowManagerListener
 import com.intellij.util.messages.MessageBusConnection
 import java.nio.file.Files
 import java.nio.file.Path
@@ -60,6 +61,7 @@ class CbdProjectService(val project: Project) : Disposable {
         connection?.disconnect()
         connection = project.messageBus.connect(this)
         connection!!.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, splitSync)
+        connection!!.subscribe(ToolWindowManagerListener.TOPIC, splitSync)
         connection!!.subscribe(VirtualFileManager.VFS_CHANGES, drift)
         splitSync.attachEditors()
         val store = storeOrNull()

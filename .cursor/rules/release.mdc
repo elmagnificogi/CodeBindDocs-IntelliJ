@@ -1,0 +1,22 @@
+---
+description: 用户说「发版」时必须本地编译 zip 并同时推 GitHub 发版
+alwaysApply: true
+---
+
+# 发版
+
+用户说「发版」时，同一轮必须做完：
+
+1. 升 `gradle.properties` 的 `pluginVersion`，并在 `CHANGELOG.md` 写同名章节
+2. 提交相关改动（含版本与 changelog）
+3. **本地**用 JDK 21 跑 `gradlew.bat buildPlugin`，把 zip 路径告诉用户（`build/distributions/CodeBindDocs-JetBrains-<version>.zip`），供本机安装测试
+4. `git push` 当前分支，并打 `v<pluginVersion>` tag 推到 origin，触发 GitHub Release / Marketplace
+
+本地编译默认：
+
+```bat
+set JAVA_HOME=C:\Users\elmag\.jdks\jdk-21.0.12.1+1
+gradlew.bat --no-daemon buildPlugin
+```
+
+不要只推 GitHub、不打本地 zip。
