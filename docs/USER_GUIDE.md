@@ -6,9 +6,9 @@
 
 ## 1. 安装
 
-1. 从 [GitHub Releases](https://github.com/elmagnificogi/CodeBindDocs-IntelliJ/releases) 下载 `CodeBindDocs-JetBrains-*.zip`，或本地 `gradlew.bat buildPlugin`（需要 **JDK 21**，产物在 `build/distributions/`）
-2. 任意 JetBrains IDE：**Settings → Plugins → 齿轮 → Install Plugin from Disk**，选该 zip
-3. 重启 IDE，打开一个**项目文件夹**（单文件模式无法扫描绑定）
+优先从 [JetBrains Marketplace](https://plugins.jetbrains.com/plugin/33981-codebind-docs) 安装：**Settings → Plugins** 搜索 **CodeBind Docs**，安装后重启，打开一个**项目文件夹**（单文件模式无法扫描绑定）。
+
+也可从 [GitHub Releases](https://github.com/elmagnificogi/CodeBindDocs-IntelliJ/releases) 下载 `CodeBindDocs-JetBrains-*.zip`，或本地 `gradlew.bat buildPlugin`（需要 **JDK 21**，产物在 `build/distributions/`），再用 **Settings → Plugins → 齿轮 → Install Plugin from Disk** 安装。
 
 环境：基于 IntelliJ 平台 **2024.1+** 的 JetBrains IDE（IntelliJ IDEA、Android Studio、PyCharm、WebStorm、GoLand、CLion、PhpStorm、Rider、DataGrip 等）。
 
@@ -97,7 +97,7 @@ heading: 概述
 | 行范围失效 | range 行号越界 | **按 symbol 重算行号** / 改绑 |
 | 符号变动 | symbol 找不到或移出原范围 | 同上 |
 | 范围重叠 | 同文件多个 range 相交 | 打开文档调整范围 |
-| 源码已变（hash） | 仅提醒文档可能过时 | 打开核对，或「标记已核对」 |
+| 源码已变（hash） | 仅提醒文档可能过时 | 右下角通知里「打开文档核对」或「标记已核对」 |
 
 相关命令：`CBD: Show Binding Drift`、`CBD: Retighten Range by Symbol`、`CBD: Refresh Doc contentHash` / `Refresh All …`、`CBD: Rebind Doc to Source`。
 

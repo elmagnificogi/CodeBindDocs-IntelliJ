@@ -20,6 +20,7 @@
 | [`src/main/kotlin/com/codebinddocs/core/Scaffold.kt`](../../src/main/kotlin/com/codebinddocs/core/Scaffold.kt) | [`docs/cbd/scaffold.md`](./scaffold.md) | file |
 | [`src/main/kotlin/com/codebinddocs/core/SymbolRange.kt`](../../src/main/kotlin/com/codebinddocs/core/SymbolRange.kt) | [`docs/cbd/symbol-range.md`](./symbol-range.md) | file |
 | [`src/main/kotlin/com/codebinddocs/core/Types.kt`](../../src/main/kotlin/com/codebinddocs/core/Types.kt) | [`docs/cbd/types.md`](./types.md) | file |
+| [`src/main/kotlin/com/codebinddocs/intellij/actions/CbdActions.kt`](../../src/main/kotlin/com/codebinddocs/intellij/actions/CbdActions.kt) | [`docs/cbd/actions.md`](./actions.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/CbdCommands.kt`](../../src/main/kotlin/com/codebinddocs/intellij/CbdCommands.kt) | [`docs/cbd/commands.md`](./commands.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/CbdConfigurable.kt`](../../src/main/kotlin/com/codebinddocs/intellij/CbdConfigurable.kt) | [`docs/cbd/configurable.md`](./configurable.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/CbdProjectService.kt`](../../src/main/kotlin/com/codebinddocs/intellij/CbdProjectService.kt) | [`docs/cbd/project-service.md`](./project-service.md) | file |
@@ -27,7 +28,6 @@
 | [`src/main/kotlin/com/codebinddocs/intellij/CbdStartupActivity.kt`](../../src/main/kotlin/com/codebinddocs/intellij/CbdStartupActivity.kt) | [`docs/cbd/startup.md`](./startup.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/CbdStatusBarWidget.kt`](../../src/main/kotlin/com/codebinddocs/intellij/CbdStatusBarWidget.kt) | [`docs/cbd/status-bar.md`](./status-bar.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/CbdUi.kt`](../../src/main/kotlin/com/codebinddocs/intellij/CbdUi.kt) | [`docs/cbd/ui-dialogs.md`](./ui-dialogs.md) | file |
-| [`src/main/kotlin/com/codebinddocs/intellij/actions/CbdActions.kt`](../../src/main/kotlin/com/codebinddocs/intellij/actions/CbdActions.kt) | [`docs/cbd/actions.md`](./actions.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/drift/DriftChecker.kt`](../../src/main/kotlin/com/codebinddocs/intellij/drift/DriftChecker.kt) | [`docs/cbd/drift-checker.md`](./drift-checker.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/editor/CbdInlayController.kt`](../../src/main/kotlin/com/codebinddocs/intellij/editor/CbdInlayController.kt) | [`docs/cbd/inlays.md`](./inlays.md) | file |
 | [`src/main/kotlin/com/codebinddocs/intellij/editor/RangePicker.kt`](../../src/main/kotlin/com/codebinddocs/intellij/editor/RangePicker.kt) | [`docs/cbd/range-picker.md`](./range-picker.md) | file |
@@ -40,7 +40,7 @@
 
 ## 快捷操作
 
-- 命令：`CBD: Open Docs Index` 打开本页
-- 命令：`CBD: Bind Doc to Current File` 为当前源文件创建绑定
-- 命令：`CBD: Delete Bound Doc` 删除绑定文档
+- 命令面板：`CBD: Open Docs Index` 打开本页
+- 命令面板：`CBD: Bind Doc to Current File` 为当前源文件创建绑定
+- 命令面板：`CBD: Delete Bound Doc` 删除绑定文档
 - 侧栏 **CodeBind Docs → Bindings** 可跳转源码 / 文档 / 删除

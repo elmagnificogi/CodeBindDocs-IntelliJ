@@ -9,9 +9,12 @@ import com.codebinddocs.core.normalizeRelPath
 import com.codebinddocs.core.resolveSymbolLineRangeFromText
 import com.codebinddocs.intellij.CbdProjectService
 import com.codebinddocs.intellij.CbdUi
+import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ModalityState
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.newvfs.BulkFileListener
 import com.intellij.openapi.vfs.newvfs.events.VFileEvent
@@ -92,7 +95,11 @@ class DriftChecker(private val svc: CbdProjectService) : BulkFileListener, Dispo
         val currentKeys = found.map { issueKey(it) }.toSet()
         notifiedKeys.removeAll { it !in currentKeys }
         svc.splitSync.updateStatus()
-        if (notify) notifyNewIssues(found, previous, focusTarget)
+        if (notify) {
+            ApplicationManager.getApplication().invokeLater({
+                if (!svc.project.isDisposed) notifyNewIssues(found, previous, focusTarget)
+            }, ModalityState.nonModal())
+        }
         return found
     }
 
@@ -308,18 +315,14 @@ class DriftChecker(private val svc: CbdProjectService) : BulkFileListener, Dispo
     }
 
     private fun promptIssueActions(issue: DriftIssue, force: Boolean) {
+        if (issue.kind == DriftKind.HASH && !force) {
+            notifyHashIssue(issue)
+            return
+        }
         if (issue.kind == DriftKind.HASH) {
-            val actions = if (force) arrayOf("打开文档核对", "标记已核对", "知道了") else arrayOf("知道了", "打开文档核对")
+            val actions = arrayOf("打开文档核对", "标记已核对", "知道了")
             when (CbdUi.choose(svc.project, "CodeBind Docs 提醒（可忽略）\n${issue.message}\n文档：${issue.doc}", *actions)) {
-                "全部标记已核对" -> refreshAllHashes()
-                "标记已核对" -> {
-                    val store = svc.storeOrNull() ?: return
-                    val binding = store.read().bindings.firstOrNull { it.doc == issue.doc } ?: return
-                    refreshBindingHash(store, binding)
-                    notifiedKeys.remove(issueKey(issue))
-                    scanAll(notify = false)
-                    CbdUi.info(svc.project, "CBD: 已清除 ${issue.doc} 的源码变更提醒")
-                }
+                "标记已核对" -> markHashChecked(issue)
                 "打开文档核对" -> svc.commands.openDoc(issue.doc)
             }
             return
@@ -348,6 +351,32 @@ class DriftChecker(private val svc: CbdProjectService) : BulkFileListener, Dispo
             "打开源文件" -> svc.commands.revealSourceRange(issue.targetPath)
             "删除文档" -> svc.commands.deleteDoc(issue.doc)
         }
+    }
+
+    private fun markHashChecked(issue: DriftIssue) {
+        val store = svc.storeOrNull() ?: return
+        val binding = store.read().bindings.firstOrNull { it.doc == issue.doc } ?: return
+        refreshBindingHash(store, binding)
+        notifiedKeys.remove(issueKey(issue))
+        scanAll(notify = false)
+        CbdUi.notify(svc.project, "CBD: 已清除 ${issue.doc} 的源码变更提醒")
+    }
+
+    private fun notifyHashIssue(issue: DriftIssue) {
+        val n = NotificationGroupManager.getInstance()
+            .getNotificationGroup("CodeBind Docs")
+            .createNotification(
+                "CodeBind Docs 提醒（可忽略）",
+                "${issue.message}\n文档：${issue.doc}",
+                NotificationType.INFORMATION,
+            )
+        n.addAction(NotificationAction.createSimpleExpiring("打开文档核对") {
+            svc.commands.openDoc(issue.doc)
+        })
+        n.addAction(NotificationAction.createSimpleExpiring("标记已核对") {
+            markHashChecked(issue)
+        })
+        n.notify(svc.project)
     }
 
     private fun notify(message: String) {
